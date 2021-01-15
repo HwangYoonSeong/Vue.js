@@ -5,10 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <title>Document</title>
 </head>
 
 <body>
+
+
+
     <div id="hello-vue" class="demo">
         <button @click="one($event), two($event)">
             Submit
@@ -79,15 +83,24 @@
             <local-component :prop-F="11">
                 <local-component>
         </div>
-        <h3>emit</h3>
+        <h3>#emit</h3>
         <div id="counter-event-example">
             <p>{{ total }}</p>
             <button-counter v-on:increment="incrementTotal"></button-counter>
             <button-counter v-on:increment="incrementTotal"></button-counter>
         </div>
-        <h3>사용자 정의 이벤트를 사용하여 폼 입력 컴포넌트 만들기</h3>
+        <h3>#사용자 정의 이벤트를 사용하여 폼 입력 컴포넌트 만들기</h3>
         <currency-input v-model="price"></currency-input>
         <p>{{price}}</p>
+
+
+        <h3>#범위를 가지는 슬롯</h3>
+        <p>적용실패</p>
+
+    </div>
+
+    <div id="app">
+        <component-a></component-a>
     </div>
     <script>
         var Child = {
@@ -122,117 +135,130 @@
             },
             template: '<div>This is Local Component</div><div>{{propE.message}}</div>'
         }
-        Vue.createApp({
-            data() {
-                return {
-                    price: 0,
-                    total: 0,
-                    pick: "",
-                    message: "",
-                    checked: true,
-                    checkedNames: [],
-                    picked: "",
-                    selected: "",
-                    selected2: 'A',
-                    options: [
-                        { text: 'One', value: 'A' },
-                        { text: 'Two', value: 'B' },
-                        { text: 'Three', value: 'C' }
-                    ]
-                }
 
-            },
-            methods: {
 
-                one(event) {
-                    console.log("one");
-                },
+        Vue.component('component-a', { template: '<div>This is Local Component</div> ' })
 
-                two(event) {
-                    console.log("two");
-                },
-                doSomething() {
-                    console.log("Hello");
-                },
 
-                incrementTotal: function () {
-                    this.total += 1
-                },
-            },
-            components: {
-                // <my-component> 는 상위 템플릿에서만 사용할 수 있습니다.
-                'local-component': Child
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: '안녕하세요 Vue!'
             }
+        })
 
-        }).component('global-component', {
-            // props 정의
-            props: {
-                myMessage: Number,
-                propD: {
-                    type: Number,
-                    default: 100
-                },
 
-            },
-            // 데이터와 마찬가지로 prop은 템플릿 내부에서 사용할 수 있으며
-            // vm의 this.message로 사용할 수 있습니다.
+//         Vue.createApp({
+//             data() {
+//                 return {
+//                     price: 0,
+//                     total: 0,
+//                     pick: "",
+//                     message: "",
+//                     checked: true,
+//                     checkedNames: [],
+//                     picked: "",
+//                     selected: "",
+//                     selected2: 'A',
+//                     options: [
+//                         { text: 'One', value: 'A' },
+//                         { text: 'Two', value: 'B' },
+//                         { text: 'Three', value: 'C' }
+//                     ]
+//                 }
 
-            template: '<div>Thiss is Global Component</div> <span> {{ propD }}{{ myMessage }}</span > '
-        }).component('global-component2', {
-            // props 정의
-            props: ['myMessagee'],
-            // 데이터와 마찬가지로 prop은 템플릿 내부에서 사용할 수 있으며
-            // vm의 this.message로 사용할 수 있습니다.
+//             },
+//             methods: {
 
-            template: '<div>Thiss is Global Component</div> <span> {{ myMessagee }}</span > '
-        }).component('button-counter', {
-            template: '<button v-on:click="incrementCounter">{{ counter }}</button>',
-            data: function () {
-                return {
-                    counter: 0
-                }
-            },
-            methods: {
-                incrementCounter: function () {
-                    this.counter += 1
-                    this.$emit('increment')
-                }
-            },
-        }).component('currency-input', {
-            template: '\
-    <span>\
-      $\
-      <input\
-        ref="input"\
-        v-bind:value="value"\
-        v-on:input="updateValue($event.target.value)">\
-    </span>\
-  ',
-            props: ['value'],
-            methods: {
-                // 값을 직접 업데이트하는 대신 이 메소드를 사용하여
-                // 입력 값에 대한 서식을 지정하고 배치 할 수 있습니다
-                updateValue: function (value) {
-                    var formattedValue = value
-                        // 공백을 제거합니다.
-                        .trim()
-                        // 소수 자릿수 2자리로 줄입니다
-                        .slice(
-                            0,
-                            value.indexOf('.') === -1
-                                ? value.length
-                                : value.indexOf('.') + 3
-                        )
-                    // 값이 아직 정규화 되지 않은 경우
-                    // 이를 수동으로 재정의하여 조건을 충족시킵니다.
-                    if (formattedValue !== value) {
-                        this.$refs.input.value = formattedValue
-                    }
-                    // 입력 이벤트를 통해 숫자 값을 내보냅니다.
-                    this.$emit('input', Number(formattedValue))
-                }
-            }
-        }).mount('#hello-vue')
+//                 one(event) {
+//                     console.log("one");
+//                 },
+
+//                 two(event) {
+//                     console.log("two");
+//                 },
+//                 doSomething() {
+//                     console.log("Hello");
+//                 },
+
+//                 incrementTotal: function () {
+//                     this.total += 1
+//                 },
+//             },
+//             components: {
+//                 // <my-component> 는 상위 템플릿에서만 사용할 수 있습니다.
+//                 'local-component': Child
+//             }
+
+//         }).component('global-component', {
+//             // props 정의
+//             props: {
+//                 myMessage: Number,
+//                 propD: {
+//                     type: Number,
+//                     default: 100
+//                 },
+
+//             },
+//             // 데이터와 마찬가지로 prop은 템플릿 내부에서 사용할 수 있으며
+//             // vm의 this.message로 사용할 수 있습니다.
+
+//             template: '<div>Thiss is Global Component</div> <span> {{ propD }}{{ myMessage }}</span > '
+//         }).component('global-component2', {
+//             // props 정의
+//             props: ['myMessagee'],
+//             // 데이터와 마찬가지로 prop은 템플릿 내부에서 사용할 수 있으며
+//             // vm의 this.message로 사용할 수 있습니다.
+
+//             template: '<div>Thiss is Global Component</div> <span> {{ myMessagee }}</span > '
+//         }).component('button-counter', {
+//             template: '<button v-on:click="incrementCounter">{{ counter }}</button>',
+//             data: function () {
+//                 return {
+//                     counter: 0
+//                 }
+//             },
+//             methods: {
+//                 incrementCounter: function () {
+//                     this.counter += 1
+//                     this.$emit('increment')
+//                 }
+//             },
+//         }).component('currency-input', {
+//             template: '\
+//     <span>\
+//       $\
+//       <input\
+//         ref="input"\
+//         v-bind:value="value"\
+//         v-on:input="updateValue($event.target.value)">\
+//     </span>\
+//   ',
+//             props: ['value'],
+//             methods: {
+//                 // 값을 직접 업데이트하는 대신 이 메소드를 사용하여
+//                 // 입력 값에 대한 서식을 지정하고 배치 할 수 있습니다
+//                 updateValue: function (value) {
+//                     var formattedValue = value
+//                         // 공백을 제거합니다.
+//                         .trim()
+//                         // 소수 자릿수 2자리로 줄입니다
+//                         .slice(
+//                             0,
+//                             value.indexOf('.') === -1
+//                                 ? value.length
+//                                 : value.indexOf('.') + 3
+//                         )
+//                     // 값이 아직 정규화 되지 않은 경우
+//                     // 이를 수동으로 재정의하여 조건을 충족시킵니다.
+//                     if (formattedValue !== value) {
+//                         this.$refs.input.value = formattedValue
+//                     }
+//                     // 입력 이벤트를 통해 숫자 값을 내보냅니다.
+//                     this.$emit('input', Number(formattedValue))
+//                 }
+//             }
+//         }).mount('#hello-vue')
 
 
 
