@@ -9,9 +9,32 @@
 </head>
 
 <body>
-    <div id="counter">
-        Counter: {{ counter }}
+    <div id="app">
+
     </div>
+
 </body>
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return { count: 4 }
+        },
+        methods: {
+            increment() {
+                // `this`는 컴포넌트 인스턴스를 참조합니다.
+                this.count++
+            }
+        }
+    })
+
+    const vm = app.mount('#app')
+
+    console.log(vm.count) // => 4
+
+    vm.increment()
+
+    console.log(vm.count) // => 5
+</script>
 
 </html>
