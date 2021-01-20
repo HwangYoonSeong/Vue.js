@@ -8,33 +8,149 @@
     <title>Document</title>
 </head>
 
-<body>
-    <div id="app">
+<body style="padding:0; margin:0">
+    <h1 style="color:aquamarine;  text-align: center;height:50px;">V3</h1>
+    <div style="margin:20px;" id="app">
 
+        Counter: {{ counter }}
+        <h1>리스트 렌더링</h1>
+        <h3>필터링된/정렬된 결과 표시</h3>
+        <li v-for="n in evenNumbers">{{ n }}</li>
+        <h4>#중첩된 v-for</h4>
+        <ul v-for="numbers in sets">
+            <li v-for="n in even(numbers)">{{ n }}</li>
+        </ul>
+        <hr>
+
+        <h1>이벤트 핸들링</h1>
+        <h3># 복합 이벤트 핸들러</h3>
+        <!-- one()과 two() 둘다 버튼 클릭 이벤트를 실행할 수 있습니다.-->
+
+        <button @click="one(), two()">
+            Submit
+        </button>
+
+        <hr>
+        <h1> 폼입력 바인딩</h1>
     </div>
 
+
+
+
+
+    <hr>
+
+    <div style="margin:20px;" id="todo-list-example">
+        <h1>TodoList</h1>
+        <form v-on:submit.prevent="addNewTodo">
+            <label for="new-todo">Add a todo</label>
+            <input v-model="newTodoText" id="new-todo" placeholder="E.g. Feed the cat" />
+            <button>Add</button>
+        </form>
+        <ul>
+            <todo-item v-for="(todo, index) in todos" :key="todo.id" :title="todo.title"
+                @remove="todos.splice(index, 1)"></todo-item>
+        </ul>
+    </div>
+
+    <hr>
+
 </body>
+
+
+
+
+
 
 <script>
     const app = Vue.createApp({
         data() {
-            return { count: 4 }
+            return {
+                counter: 4,
+                sets: [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]],
+                numbers: [1, 2, 3, 4, 5]
+            }
         },
         methods: {
             increment() {
                 // `this`는 컴포넌트 인스턴스를 참조합니다.
-                this.count++
+                this.counter++
+            },
+            even(numbers) {
+                return numbers.filter(number => number % 2 === 0)
+            },
+            one() {
+                // 첫번째 핸들러 로직...
+                console.log('one');
+            },
+            two() {
+                // 두번째 핸들러 로직...
+                console.log('two');
+            },
+
+        },
+        computed: {
+            evenNumbers() {
+                return this.numbers.filter(number => number % 2 === 0)
             }
         }
     })
 
     const vm = app.mount('#app')
 
-    console.log(vm.count) // => 4
+    console.log(vm.counter) // => 4
 
     vm.increment()
 
-    console.log(vm.count) // => 5
+    console.log(vm.counter) // => 5
+
+
+    ///////////////// todoList //////////////////
+
+    const app2 = Vue.createApp({
+        data() {
+            return {
+                newTodoText: '',
+                todos: [
+                    {
+                        id: 1,
+                        title: 'Do the dishes'
+                    },
+                    {
+                        id: 2,
+                        title: 'Take out the trash'
+                    },
+                    {
+                        id: 3,
+                        title: 'Mow the lawn'
+                    }
+                ],
+                nextTodoId: 4
+            }
+        },
+        methods: {
+            addNewTodo() {
+                this.todos.push({
+                    id: this.nextTodoId++,
+                    title: this.newTodoText
+                })
+                this.newTodoText = '' //입력값 초기화
+            }
+        }
+    })
+
+    app2.component('todo-item', {
+        template: `
+    <li>
+      {{ title }}
+      <button @click="$emit('remove')">Remove</button>
+    </li>
+  `,
+        props: ['title']
+    })
+
+    app2.mount('#todo-list-example')
+
 </script>
 
 </html>
