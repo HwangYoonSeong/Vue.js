@@ -49,6 +49,33 @@
 
         <component v-bind:is="currentTabComponent" class="tab"></component>
 
+
+        <hr>
+        <p>20210127</p>
+        <h1>커스텀 이벤트</h1>
+        <h3>이벤트 이름</h3>
+        <p>이벤트 이름은 항상 kebab-case</p>
+        <h3>커스텀 이벤트 정의하기 </h3>
+        <p>이벤트 이름은 항상 kebab-case</p>
+
+        <hr>
+        <h1>이름을 갖는 Slot</h1>
+        <base-layout>
+            <template v-slot:header>
+                <h1>Here might be a page title</h1>
+            </template>
+
+            <template v-slot:default>
+                <p>A paragraph for the main content.</p>
+                <p>And another one.</p>
+            </template>
+
+            <template v-slot:footer>
+                <p>Here's some contact info</p>
+            </template>
+        </base-layout>
+
+
     </div>
 
 
@@ -144,6 +171,20 @@
 
     app.component('tab-archive', {
         template: `<div class="demo-tab">Archive component</div>`
+    })
+
+    app.component('base-layout', {
+        template: `<div class="container">
+  <header>
+    <slot name="header">
+  </header>
+  <main>
+    <slot>
+  </main>
+  <footer>
+    <slot name="footer">
+  </footer>
+</div>`
     })
 
     const vm = app.mount('#app')
