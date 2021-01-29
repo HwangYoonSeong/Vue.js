@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/vue@next"></script>
     <title>Document</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.0/animate.min.css" rel="stylesheet"
+        type="text/css" />
 </head>
 
 <body style="padding:0; margin:0">
@@ -76,6 +78,25 @@
         </base-layout>
 
 
+        <hr>
+        <h1>진입/진출 트랜지션</h1>
+        <button @click="show = !show">
+            Toggle
+        </button>
+
+        <transition name="fade">
+            <p v-if="show">hello</p>
+        </transition>
+
+        <h3># 사용자 지정 트랜지션 클래스</h3>
+        <button @click="show2 = !show2">
+            Toggle render
+        </button>
+
+        <transition name="custom-classes-transition" enter-active-class="animate__animated animate__tada"
+            leave-active-class="animate__animated animate__bounceOutRight">
+            <p v-if="show2">안녕</p>
+        </transition>
     </div>
 
 
@@ -114,7 +135,9 @@
                 sets: [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]],
                 numbers: [1, 2, 3, 4, 5],
                 currentTab: 'Home',
-                tabs: ['Home', 'Posts', 'Archive']
+                tabs: ['Home', 'Posts', 'Archive'],
+                show: true,
+                show2: true,
             }
         },
         methods: {
@@ -290,5 +313,20 @@
     app2.mount('#todo-list-example')
 
 </script>
+<style>
+    .fade-enter-active {
+        transition: all 0.3s ease-out;
+    }
+
+    .fade-leave-active {
+        transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+    }
+
+    .fade-enter-from,
+    .fade-leave-to {
+        transform: translateX(20px);
+        opacity: 0;
+    }
+</style>
 
 </html>
