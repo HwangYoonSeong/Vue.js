@@ -110,6 +110,13 @@
                 {{ item }}
             </h2>
         </transition-group>
+
+
+        <hr>
+        <h1>사용자 지정 디렉티브</h1>
+        <p>Scroll down the page</p>
+        <p v-pin:[direction]="200">사용자 지정 디렉티브: Stick me 200px from the {{ direction }} of the page</p>
+
     </div>
 
 
@@ -152,7 +159,8 @@
                 show: true,
                 show2: true,
                 items: [1, 2, 3, 4, 5, 6, 7, 8, 9],
-                nextNum: 10
+                nextNum: 10,
+                direction: 'top'
             }
         },
         methods: {
@@ -274,15 +282,28 @@
     app.component('base-layout', {
         template: `<div class="container">
   <header>
-    <slot name="header">
+    <slot name="header"/>
   </header>
   <main>
-    <slot>
+    <slot/>
   </main>
   <footer>
-    <slot name="footer">
+    <slot name="footer"/>
   </footer>
 </div>`
+    })
+
+    app.directive('pin', {
+        mounted(el, binding) {
+            el.style.position = 'fixed'
+            // bindig.value는 디렉티브에게 전달한 값입니다.. 이 경우에는 200입니다.
+            //el.style.top = binding.value + 'px'
+
+            // // binding.arg는 디렉티브에 전달되는 인자입니다.
+            const s = binding.arg || 'top'
+            //console.log(s);
+            el.style[s] = binding.value + 'px'
+        }
     })
 
     const vm = app.mount('#app')
