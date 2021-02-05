@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+</head>
+
+<body>
+    <div id="app">Hello</div>
+
+    <script>
+        const NotFoundComponent = {
+            data: () => ({
+
+            }),
+
+            methods: {
+                Hello() {
+
+                    console.log(window.location.pathname);
+                }
+            },
+            template: '<p>Pagee not found</p>\
+            <button @click="Hello">Hello</button>'
+
+        }
+        const HomeComponent = {
+            template: '<p>Home page</p>\
+        <a href="/about">Hello</a>' }
+        const AboutComponent = { template: '<p>About page</p>' }
+
+        const routes = {
+            '/SimpleRouter.html': HomeComponent,
+            '/about': AboutComponent
+        }
+
+
+        const SimpleRouter = {
+            data: () => ({
+                currentRoute: window.location.pathname
+            }),
+
+            computed: {
+                CurrentComponent() {
+                    console.log(this.currentRoute);
+                    return routes[this.currentRoute] || NotFoundComponent
+                }
+            },
+
+            render() {
+                return Vue.h(this.CurrentComponent)
+            }
+        }
+
+        Vue.createApp(SimpleRouter).mount('#app')
+    </script>
+</body>
+
+</html>
